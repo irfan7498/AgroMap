@@ -1,0 +1,90 @@
+{
+    "nurseries": [
+        {
+            "id": "nur001",
+            "name": "GreenGrow Nursery",
+            "lat": 18.5412,
+            "lng": 73.8721,
+            "inventory": {
+                "mango": 800,
+                "guava": 500,
+                "pomegranate": 300
+            },
+            "contact": "+91-9876543210"
+        },
+        {
+            "id": "nur002",
+            "name": "Sahyadri Plant House",
+            "lat": 18.4920,
+            "lng": 73.8100,
+            "inventory": {
+                "coconut": 400,
+                "banana": 1200,
+                "papaya": 600
+            },
+            "contact": "+91-9123456780"
+        },
+        {
+            "id": "nur003",
+            "name": "Deccan Agri Nursery",
+            "lat": 18.5700,
+            "lng": 73.9200,
+            "inventory": {
+                "mango": 600,
+                "orange": 450,
+                "cashew": 200
+            },
+            "contact": "+91-9988776655"
+        },
+        {
+            "id": "nur004",
+            "name": "Krishak Vatika",
+            "lat": 18.4500,
+            "lng": 73.8500,
+            "inventory": {
+                "teak": 1000,
+                "neem": 800,
+                "mango": 350
+            },
+            "contact": "+91-9112233445"
+        },
+        {
+            "id": "nur005",
+            "name": "Panchgani Flora Hub",
+            "lat": 17.9240,
+            "lng": 73.7980,
+            "inventory": {
+                "guava": 700,
+                "pomegranate": 500,
+                "orange": 400
+            },
+            "contact": "+91-9334455667"
+        },
+        {
+            "id": "nur006",
+            "name": "Nashik Green Fields",
+            "lat": 19.9975,
+            "lng": 73.7898,
+            "inventory": {
+                "mango": 900,
+                "banana": 1500,
+                "papaya": 800,
+                "coconut": 200
+            },
+            "contact": "+91-9445566778"
+        },
+        {
+            "id": "nur007",
+            "name": "Satara Farm Nursery",
+            "lat": 17.6805,
+            "lng": 74.0183,
+            "inventory": {
+                "teak": 600,
+                "neem": 400,
+                "cashew": 350,
+                "mango": 250
+            },
+            "contact": "+91-9556677889"
+        }
+    ]
+}

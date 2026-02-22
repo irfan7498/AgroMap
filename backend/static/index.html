@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroMap — API Test Console</title>
+    <style>
+        :root {
+            --bg: #0f1117;
+            --surface: #1a1d27;
+            --surface2: #242836;
+            --accent: #22c55e;
+            --accent2: #16a34a;
+            --text: #e2e8f0;
+            --muted: #94a3b8;
+            --border: #2d3348;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            --radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* ── Header ──────────────────────────────── */
+        header {
+            background: linear-gradient(135deg, #064e3b, #166534, #15803d);
+            padding: 24px 32px;
+            text-align: center;
+            border-bottom: 2px solid var(--accent);
+        }
+
+        header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        header h1 span {
+            color: #86efac;
+        }
+
+        header p {
+            color: #bbf7d0;
+            margin-top: 4px;
+            font-size: 14px;
+        }
+
+        /* ── Layout ──────────────────────────────── */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 20px;
+        }
+
+        /* ── Card ────────────────────────────────── */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.08);
+        }
+
+        .card-head {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 20px;
+            background: var(--surface2);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .card-head .method {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .method.get {
+            background: #1e3a5f;
+            color: #60a5fa;
+        }
+
+        .method.post {
+            background: #3b1f1f;
+            color: #f87171;
+        }
+
+        .card-head .path {
+            font-family: 'Cascadia Code', 'Fira Code', monospace;
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .card-head .title {
+            margin-left: auto;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .card-body {
+            padding: 16px 20px;
+        }
+
+        .card-body label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--muted);
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card-body textarea,
+        .card-body input {
+            width: 100%;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            padding: 10px 12px;
+            font-family: 'Cascadia Code', 'Fira Code', monospace;
+            font-size: 12px;
+            margin-bottom: 12px;
+            resize: vertical;
+        }
+
+        .card-body textarea:focus,
+        .card-body input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .input-row.three {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+
+        /* ── Button ──────────────────────────────── */
+        button.send {
+            width: 100%;
+            padding: 10px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: #fff;
+            font-weight: 700;
+            font-size: 13px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.1s;
+            letter-spacing: 0.3px;
+        }
+
+        button.send:hover {
+            opacity: 0.9;
+        }
+
+        button.send:active {
+            transform: scale(0.98);
+        }
+
+        /* ── Response ────────────────────────────── */
+        .response {
+            margin-top: 12px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            font-family: 'Cascadia Code', 'Fira Code', monospace;
+            font-size: 12px;
+            min-height: 60px;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-word;
+            color: var(--muted);
+        }
+
+        .response.ok {
+            border-color: var(--accent);
+            color: #86efac;
+        }
+
+        .response.err {
+            border-color: var(--danger);
+            color: #fca5a5;
+        }
+
+        /* ── Status Bar ──────────────────────────── */
+        .status-bar {
+            text-align: center;
+            padding: 12px;
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .status-bar a {
+            color: var(--info);
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>🌱 Agro<span>Map</span> — API Test Console</h1>
+        <p>Backend Endpoint Tester &bull; All endpoints: /api/v1/*</p>
+    </header>
+
+    <div class="container">
+        <div class="grid">
+
+            <!-- ── 1. Health Check ─────────────────────── -->
+            <div class="card">
+                <div class="card-head">
+                    <span class="method get">GET</span>
+                    <span class="path">/api/v1/health</span>
+                    <span class="title">Health</span>
+                </div>
+                <div class="card-body">
+                    <button class="send" onclick="doGet('/api/v1/health', 'res-health')">Send Request</button>
+                    <div class="response" id="res-health">Click to test…</div>
+                </div>
+            </div>
+
+            <!-- ── 2. Land Area ────────────────────────── -->
+            <div class="card">
+                <div class="card-head">
+                    <span class="method post">POST</span>
+                    <span class="path">/api/v1/land/area</span>
+                    <span class="title">Land Area</span>
+                </div>
+                <div class="card-body">
+                    <label>Polygon Coordinates (JSON)</label>
+                    <textarea id="inp-area" rows="5">[
+  [18.5204, 73.8567],
+  [18.5212, 73.8571],
+  [18.5209, 73.8580],
+  [18.5201, 73.8574]
+]</textarea>
+                    <button class="send"
+                        onclick="doPost('/api/v1/land/area', {coordinates: JSON.parse(document.getElementById('inp-area').value)}, 'res-area')">Calculate
+                        Area</button>
+                    <div class="response" id="res-area">Response appears here…</div>
+                </div>
+            </div>
+
+            <!-- ── 3. Crops ────────────────────────────── -->
+            <div class="card">
+                <div class="card-head">
+                    <span class="method get">GET</span>
+                    <span class="path">/api/v1/crops</span>
+                    <span class="title">Crops</span>
+                </div>
+                <div class="card-body">
+                    <button class="send" onclick="doGet('/api/v1/crops', 'res-crops')">Fetch Crops</button>
+                    <div class="response" id="res-crops">Click to fetch…</div>
+                </div>
+            </div>
+
+            <!-- ── 4. Plantation Estimate ──────────────── -->
+            <div class="card">
+                <div class="card-head">
+                    <span class="method post">POST</span>
+                    <span class="path">/api/v1/plantation/estimate</span>
+                    <span class="title">Estimate</span>
+                </div>
+                <div class="card-body">
+                    <div class="input-row three">
+                        <div><label>Area (sqft)</label><input id="inp-est-area" value="133819.5"></div>
+                        <div><label>Row Spacing (m)</label><input id="inp-est-row" value="9"></div>
+                        <div><label>Col Spacing (m)</label><input id="inp-est-col" value="9"></div>
+                    </div>
+                    <button class="send" onclick="doPost('/api/v1/plantation/estimate', {
+                area_sqft: +document.getElementById('inp-est-area').value,
+                spacing_row_m: +document.getElementById('inp-est-row').value,
+                spacing_col_m: +document.getElementById('inp-est-col').value
+            }, 'res-estimate')">Estimate Plants</button>
+                    <div class="response" id="res-estimate">Response appears here…</div>
+                </div>
+            </div>
+
+            <!-- ── 5. Plantation Layout ────────────────── -->
+            <div class="card">
+                <div class="card-head">
+                    <span class="method post">POST</span>
+                    <span class="path">/api/v1/plantation/layout</span>
+                    <span class="title">Layout</span>
+                </div>
+                <div class="card-body">
+                    <label>Polygon (JSON)</label>
+                    <textarea id="inp-layout-poly" rows="4">[
+  [18.5204, 73.8567],
+  [18.5212, 73.8571],
+  [18.5209, 73.8580],
+  [18.5201, 73.8574]
+]</textarea>
+                    <label>Spacing (m)</label>
+                    <input id="inp-layout-spacing" value="9">
+                    <button class="send" onclick="doPost('/api/v1/plantation/layout', {
+                polygon: JSON.parse(document.getElementById('inp-layout-poly').value),
+                spacing_m: +document.getElementById('inp-layout-spacing').value
+            }, 'res-layout')">Generate Layout</button>
+                    <div class="response" id="res-layout">Response appears here…</div>
+                </div>
+            </div>
+
+            <!-- ── 6. Nurseries ────────────────────────── -->
+            <div class="card">
+                <div class="card-head">
+                    <span class="method get">GET</span>
+                    <span class="path">/api/v1/nurseries/nearby</span>
+                    <span class="title">Nurseries</span>
+                </div>
+                <div class="card-body">
+                    <div class="input-row three">
+                        <div><label>Latitude</label><input id="inp-nur-lat" value="18.5204"></div>
+                        <div><label>Longitude</label><input id="inp-nur-lng" value="73.8567"></div>
+                        <div><label>Radius (km)</label><input id="inp-nur-rad" value="50"></div>
+                    </div>
+                    <label>Crop (optional)</label>
+                    <input id="inp-nur-crop" placeholder="e.g. mango">
+                    <button class="send" onclick="(() => {
+                let q = `lat=${document.getElementById('inp-nur-lat').value}&lng=${document.getElementById('inp-nur-lng').value}&radius_km=${document.getElementById('inp-nur-rad').value}`;
+                let c = document.getElementById('inp-nur-crop').value.trim();
+                if(c) q += '&crop=' + c;
+                doGet('/api/v1/nurseries/nearby?' + q, 'res-nurseries');
+            })()">Find Nurseries</button>
+                    <div class="response" id="res-nurseries">Response appears here…</div>
+                </div>
+            </div>
+
+            <!-- ── 7. Create Booking ───────────────────── -->
+            <div class="card">
+                <div class="card-head">
+                    <span class="method post">POST</span>
+                    <span class="path">/api/v1/bookings</span>
+                    <span class="title">Book</span>
+                </div>
+                <div class="card-body">
+                    <div class="input-row three">
+                        <div><label>Nursery ID</label><input id="inp-bk-nid" value="nur001"></div>
+                        <div><label>Crop</label><input id="inp-bk-crop" value="mango"></div>
+                        <div><label>Quantity</label><input id="inp-bk-qty" value="120"></div>
+                    </div>
+                    <button class="send" onclick="doPost('/api/v1/bookings', {
+                nursery_id: document.getElementById('inp-bk-nid').value,
+                crop: document.getElementById('inp-bk-crop').value,
+                quantity: +document.getElementById('inp-bk-qty').value
+            }, 'res-booking')">Place Booking</button>
+                    <div class="response" id="res-booking">Response appears here…</div>
+                </div>
+            </div>
+
+            <!-- ── 8. Get Booking ──────────────────────── -->
+            <div class="card">
+                <div class="card-head">
+                    <span class="method get">GET</span>
+                    <span class="path">/api/v1/bookings/{id}</span>
+                    <span class="title">Lookup</span>
+                </div>
+                <div class="card-body">
+                    <label>Booking ID</label>
+                    <input id="inp-bk-id" placeholder="e.g. BK3A1F2C">
+                    <button class="send"
+                        onclick="doGet('/api/v1/bookings/' + document.getElementById('inp-bk-id').value, 'res-booking-get')">Get
+                        Booking</button>
+                    <div class="response" id="res-booking-get">Enter a booking ID from above…</div>
+                </div>
+            </div>
+
+            <!-- ── 9. Weather ──────────────────────────── -->
+            <div class="card">
+                <div class="card-head">
+                    <span class="method get">GET</span>
+                    <span class="path">/api/v1/weather</span>
+                    <span class="title">Weather</span>
+                </div>
+                <div class="card-body">
+                    <div class="input-row">
+                        <div><label>Latitude</label><input id="inp-wx-lat" value="18.5204"></div>
+                        <div><label>Longitude</label><input id="inp-wx-lng" value="73.8567"></div>
+                    </div>
+                    <button class="send"
+                        onclick="doGet(`/api/v1/weather?lat=${document.getElementById('inp-wx-lat').value}&lng=${document.getElementById('inp-wx-lng').value}`, 'res-weather')">Get
+                        Weather</button>
+                    <div class="response" id="res-weather">Response appears here…</div>
+                </div>
+            </div>
+
+            <!-- ── 10. Water Calculator ────────────────── -->
+            <div class="card">
+                <div class="card-head">
+                    <span class="method post">POST</span>
+                    <span class="path">/api/v1/water/calculate</span>
+                    <span class="title">Water</span>
+                </div>
+                <div class="card-body">
+                    <div class="input-row">
+                        <div><label>Crop</label><input id="inp-wt-crop" value="mango"></div>
+                        <div><label>Plants</label><input id="inp-wt-plants" value="148"></div>
+                    </div>
+                    <button class="send" onclick="doPost('/api/v1/water/calculate', {
+                crop: document.getElementById('inp-wt-crop').value,
+                plants: +document.getElementById('inp-wt-plants').value
+            }, 'res-water')">Calculate Water</button>
+                    <div class="response" id="res-water">Response appears here…</div>
+                </div>
+            </div>
+
+        </div><!-- /grid -->
+
+        <div class="status-bar">
+            AgroMap Hackathon Backend &bull; <a href="/docs" target="_blank">Swagger UI ↗</a> &bull; <a href="/redoc"
+                target="_blank">ReDoc ↗</a>
+        </div>
+    </div><!-- /container -->
+
+    <script>
+        const BASE = '';  // Same origin
+
+        async function doGet(path, resId) {
+            const el = document.getElementById(resId);
+            el.className = 'response';
+            el.textContent = '⏳ Loading…';
+            try {
+                const r = await fetch(BASE + path);
+                const data = await r.json();
+                el.textContent = JSON.stringify(data, null, 2);
+                el.className = 'response ' + (r.ok ? 'ok' : 'err');
+            } catch (e) {
+                el.textContent = '❌ ' + e.message;
+                el.className = 'response err';
+            }
+        }
+
+        async function doPost(path, body, resId) {
+            const el = document.getElementById(resId);
+            el.className = 'response';
+            el.textContent = '⏳ Loading…';
+            try {
+                const r = await fetch(BASE + path, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+                const data = await r.json();
+                el.textContent = JSON.stringify(data, null, 2);
+                el.className = 'response ' + (r.ok ? 'ok' : 'err');
+            } catch (e) {
+                el.textContent = '❌ ' + e.message;
+                el.className = 'response err';
+            }
+        }
+    </script>
+
+</body>
+
+</html>
