@@ -9,7 +9,9 @@ export const LANGUAGES: { key: Lang; label: string }[] = [
 export const T: Record<Lang, Record<string, string>> = {
     en: {
         appName: 'AgroMap',
-        home: 'Map',
+        home: 'Home',
+        landMap: 'Map',
+        landMapTitle: 'Land Mapping',
         plan: 'Plan',
         water: 'Water',
         weather: 'Weather',
@@ -58,7 +60,9 @@ export const T: Record<Lang, Record<string, string>> = {
     },
     hi: {
         appName: 'एग्रोमैप',
-        home: 'नक्शा',
+        home: 'होम',
+        landMap: 'नक्शा',
+        landMapTitle: 'भूमि मानचित्रण',
         plan: 'योजना',
         water: 'पानी',
         weather: 'मौसम',
@@ -107,7 +111,9 @@ export const T: Record<Lang, Record<string, string>> = {
     },
     mr: {
         appName: 'ॲग्रोमॅप',
-        home: 'नकाशा',
+        home: 'होम',
+        landMap: 'नकाशा',
+        landMapTitle: 'जमीन मॅपिंग',
         plan: 'आखणी',
         water: 'पाणी',
         weather: 'हवामान',
