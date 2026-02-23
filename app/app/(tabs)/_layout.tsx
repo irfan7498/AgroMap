@@ -4,10 +4,12 @@ import { Colors } from '@/constants/theme';
 import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import { LANGUAGES, Lang } from '@/constants/i18n';
 import { StatusBar } from 'expo-status-bar';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import 'react-native-reanimated';
 
 function TabLayout() {
   const { t, lang, setLang } = useApp();
+  const insets = useSafeAreaInsets();
 
   return (
     <>
@@ -32,8 +34,8 @@ function TabLayout() {
           tabBarStyle: {
             backgroundColor: Colors.primaryDark,
             borderTopWidth: 0,
-            height: 62,
-            paddingBottom: 8,
+            height: 62 + insets.bottom,
+            paddingBottom: 8 + insets.bottom,
           },
           tabBarLabelStyle: { fontSize: 10, fontWeight: '600' },
           headerStyle: { backgroundColor: Colors.primaryDark },

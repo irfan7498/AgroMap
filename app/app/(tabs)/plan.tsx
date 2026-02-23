@@ -26,18 +26,17 @@ export default function PlanScreen() {
     const { t } = useApp();
     const [selectedCrop, setSelectedCrop] = useState(CROP_LIST[0]);
     const [area, setArea] = useState('10000');
-    const [rowSpacing, setRowSpacing] = useState(String(CROP_LIST[0].spacing.recommended));
-    const [colSpacing, setColSpacing] = useState(String(CROP_LIST[0].spacing.recommended));
+    const [rowSpacing, setRowSpacing] = useState(String((CROP_LIST[0].spacing.recommended * 3.28084).toFixed(1)));
+    const [colSpacing, setColSpacing] = useState(String((CROP_LIST[0].spacing.recommended * 3.28084).toFixed(1)));
     const [estimate, setEstimate] = useState<Estimate | null>(null);
     const [loading, setLoading] = useState(false);
     const [showCropList, setShowCropList] = useState(false);
 
     function calculateLocally() {
         const areaSqft = parseFloat(area) || 0;
-        const row = parseFloat(rowSpacing) || 1;
-        const col = parseFloat(colSpacing) || 1;
-        const areaSqm = areaSqft * 0.092903;
-        const recommended = Math.floor(areaSqm / (row * col));
+        const rowFt = parseFloat(rowSpacing) || 1;
+        const colFt = parseFloat(colSpacing) || 1;
+        const recommended = Math.floor(areaSqft / (rowFt * colFt));
         setEstimate({
             min_plants: Math.floor(recommended * 0.9),
             max_plants: Math.ceil(recommended * 1.1),
@@ -53,8 +52,8 @@ export default function PlanScreen() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     area_sqft: parseFloat(area) || 0,
-                    spacing_row_m: parseFloat(rowSpacing) || 1,
-                    spacing_col_m: parseFloat(colSpacing) || 1,
+                    spacing_row_m: (parseFloat(rowSpacing) || 1) / 3.28084,
+                    spacing_col_m: (parseFloat(colSpacing) || 1) / 3.28084,
                 }),
             });
             if (res.ok) {
@@ -72,8 +71,8 @@ export default function PlanScreen() {
 
     const selectCrop = (crop: typeof CROP_LIST[0]) => {
         setSelectedCrop(crop);
-        setRowSpacing(String(crop.spacing.recommended));
-        setColSpacing(String(crop.spacing.recommended));
+        setRowSpacing(String((crop.spacing.recommended * 3.28084).toFixed(1)));
+        setColSpacing(String((crop.spacing.recommended * 3.28084).toFixed(1)));
         setShowCropList(false);
     };
 
@@ -94,7 +93,7 @@ export default function PlanScreen() {
                                 <Text style={styles.cropOptionIcon}>{CROP_ICONS[c.id]}</Text>
                                 <Text style={styles.cropOptionName}>{c.name}</Text>
                                 <Text style={styles.cropOptionSpacing}>
-                                    {c.spacing.min}–{c.spacing.max}m
+                                    {(c.spacing.min * 3.28084).toFixed(1)}–{(c.spacing.max * 3.28084).toFixed(1)}ft
                                 </Text>
                             </TouchableOpacity>
                         ))}
@@ -106,17 +105,17 @@ export default function PlanScreen() {
             <View style={[styles.card, styles.infoBar]}>
                 <View style={styles.infoItem}>
                     <Text style={styles.infoLabel}>Min Spacing</Text>
-                    <Text style={styles.infoVal}>{selectedCrop.spacing.min}m</Text>
+                    <Text style={styles.infoVal}>{(selectedCrop.spacing.min * 3.28084).toFixed(1)}ft</Text>
                 </View>
                 <View style={styles.infoDivider} />
                 <View style={styles.infoItem}>
                     <Text style={styles.infoLabel}>Recommended</Text>
-                    <Text style={[styles.infoVal, { color: Colors.primary }]}>{selectedCrop.spacing.recommended}m</Text>
+                    <Text style={[styles.infoVal, { color: Colors.primary }]}>{(selectedCrop.spacing.recommended * 3.28084).toFixed(1)}ft</Text>
                 </View>
                 <View style={styles.infoDivider} />
                 <View style={styles.infoItem}>
                     <Text style={styles.infoLabel}>Max Spacing</Text>
-                    <Text style={styles.infoVal}>{selectedCrop.spacing.max}m</Text>
+                    <Text style={styles.infoVal}>{(selectedCrop.spacing.max * 3.28084).toFixed(1)}ft</Text>
                 </View>
             </View>
 
